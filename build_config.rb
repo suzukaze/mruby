@@ -7,9 +7,10 @@ MRuby::Build.new do |conf|
   # conf.gem 'examples/mrbgems/c_extension_example' do |g|
   #   g.cc.flags << '-g' # append cflags in this gem
   # end
-  conf.gem '/Users/hiroejun/work/mruby_msgpack/origin/mruby_msgpack' do |g|
+  conf.gem '/Users/hiroejun/work/mruby_msgpack/origin/mruby-msgpack' do |g|
     g.cc.flags << '-g' # append cflags in this gem
   end
+  #conf.gem :git => 'https://github.com/suzukaze/mruby-msgpack.git'
 
   # conf.gem 'examples/mrbgems/c_and_ruby_extension_example'
   # conf.gem :github => 'masuidrive/mrbgems-example', :branch => 'master'
