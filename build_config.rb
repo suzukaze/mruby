@@ -10,18 +10,20 @@ MRuby::Build.new do |conf|
   #conf.gem '/Users/hiroejun/work/mruby_msgpack/origin/mruby-msgpack' do |g|
   #  g.cc.flags << '-g' # append cflags in this gem
   #end
-  conf.gem :git => 'https://github.com/suzukaze/mruby-msgpack.git'
-  conf.gem :git => 'https://github.com/mattn/mruby-uv.git'
+  #conf.gem :git => 'https://github.com/suzukaze/mruby-msgpack.git'
+  #conf.gem :git => 'https://github.com/mattn/mruby-uv.git'
+  conf.gem '/Users/hiroejun/work/mruby-uv/fork/mruby-uv'
   #conf.gem :git => 'https://github.com/mattn/mruby-http.git'
   conf.gem '/Users/hiroejun/work/mruby-http/fork/mruby-http'
-  conf.gem :git => 'https://github.com/mattn/mruby-json'
-  conf.gem :git => 'https://github.com/iij/mruby-pack.git'
-  conf.gem :git => 'https://github.com/iij/mruby-digest.git'
+  #conf.gem :git => 'https://github.com/mattn/mruby-json'
+  #conf.gem :git => 'https://github.com/iij/mruby-pack.git'
+  #conf.gem :git => 'https://github.com/iij/mruby-digest.git'
   #conf.gem :git => 'https://github.com/matsumoto-r/mruby-simplehttp.git'
   conf.gem '/Users/hiroejun/work/mruby-simplehttp/fork/mruby-simplehttp'
   #conf.gem :git => 'https://github.com/matsumoto-r/mruby-httprequest.git'
   conf.gem '/Users/hiroejun/work/mruby-httprequest/fork/mruby-httprequest'
-  conf.gem :git => 'https://github.com/matsumoto-r/mruby-oauth.git'
+  #conf.gem :git => 'https://github.com/matsumoto-r/mruby-oauth.git'
+
   #conf.gem :git => 'https://github.com/matsumoto-r/mruby-sleep.git'
   #conf.gem :git => 'https://github.com/matsumoto-r/mruby-zabbix.git'
   #conf.gem :git => 'https://github.com/matsumoto-r/mruby-growthforecast.git'
