@@ -7,10 +7,19 @@ MRuby::Build.new do |conf|
   # conf.gem 'examples/mrbgems/c_extension_example' do |g|
   #   g.cc.flags << '-g' # append cflags in this gem
   # end
-  conf.gem '/Users/hiroejun/work/mruby_msgpack/origin/mruby-msgpack' do |g|
-    g.cc.flags << '-g' # append cflags in this gem
-  end
-  #conf.gem :git => 'https://github.com/suzukaze/mruby-msgpack.git'
+  #conf.gem '/Users/hiroejun/work/mruby_msgpack/origin/mruby-msgpack' do |g|
+  #  g.cc.flags << '-g' # append cflags in this gem
+  #end
+  conf.gem :git => 'https://github.com/suzukaze/mruby-msgpack.git'
+  conf.gem :git => 'https://github.com/iij/mruby-io.git'
+  conf.gem :git => 'https://github.com/iij/mruby-socket.git'
+  conf.gem :git => 'https://github.com/iij/mruby-pack.git'
+  #conf.gem :git => 'https://github.com/mattn/mruby-json.git'
+  conf.gem :git => 'https://github.com/mattn/mruby-http.git'
+  conf.gem :git => 'https://github.com/y-ken/mruby-simplehttp-socket.git'
+  conf.gem :git => 'https://github.com/matsumoto-r/mruby-httprequest.git'
+  conf.gem '/Users/hiroejun/work/fluent-logger-mruby/fork/fluent-logger-mruby'
+  #conf.gem :git => 'https://github.com/y-ken/fluent-logger-mruby.git'
 
   # conf.gem 'examples/mrbgems/c_and_ruby_extension_example'
   # conf.gem :github => 'masuidrive/mrbgems-example', :branch => 'master'
