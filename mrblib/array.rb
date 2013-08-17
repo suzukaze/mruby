@@ -6,6 +6,19 @@ class Array
 
   ##
   # Calls the given block for each element of +self+
+  # and pass the respective element. Each element will
+  # be replaced by the resulting values.
+  #
+  # ISO 15.2.12.5.7
+  def collect!(&block)
+    self.each_index{|idx|
+      self[idx] = block.call(self[idx])
+    }
+    self
+  end
+
+  ##
+  # Calls the given block for each element of +self+
   # and pass the respective element.
   #
   # ISO 15.2.12.5.10
@@ -38,25 +51,6 @@ class Array
   end
 
   ##
-  # Calls the given block for each element of +self+
-  # and pass the respective element. Each element will
-  # be replaced by the resulting values.
-  #
-  # ISO 15.2.12.5.7
-  def collect!(&block)
-    self.each_index{|idx|
-      self[idx] = block.call(self[idx])
-    }
-    self
-  end
-
-  ##
-  # Alias for collect!
-  #
-  # ISO 15.2.12.5.20
-  alias map! collect!
-
-  ##
   # Private method for Array creation.
   #
   # ISO 15.2.12.5.15
@@ -77,6 +71,12 @@ class Array
 
     self
   end
+
+  ##
+  # Alias for collect!
+  #
+  # ISO 15.2.12.5.20
+  alias map! collect!
 
   ##
   # Delete element with index +key+
