@@ -82,6 +82,8 @@ mrb_hash_new_capa(mrb_state *mrb, int capa)
 {
   struct RHash *h;
 
+  puts("mrb_hash_new_capa");
+  printf("capa=%d¥n", capa);
   h = (struct RHash*)mrb_obj_alloc(mrb, MRB_TT_HASH, mrb->hash_class);
   h->ht = kh_init(ht, mrb);
   if (capa > 0) {
@@ -94,6 +96,7 @@ mrb_hash_new_capa(mrb_state *mrb, int capa)
 mrb_value
 mrb_hash_new(mrb_state *mrb)
 {
+  puts("mrb_hash_new");
   return mrb_hash_new_capa(mrb, 0);
 }
 
@@ -122,6 +125,7 @@ mrb_hash_fetch(mrb_state *mrb, mrb_value hash, mrb_value key, mrb_value def)
   khash_t(ht) *h = RHASH_TBL(hash);
   khiter_t k;
 
+  puts("mrb_hash_fetch");
   if (h) {
     k = kh_get(ht, h, key);
     if (k != kh_end(h))
@@ -138,6 +142,7 @@ mrb_hash_set(mrb_state *mrb, mrb_value hash, mrb_value key, mrb_value val) /* mr
   khash_t(ht) *h;
   khiter_t k;
 
+  puts("mrb_hash_set");
   mrb_hash_modify(mrb, hash);
   h = RHASH_TBL(hash);
 
@@ -162,6 +167,7 @@ mrb_hash_dup(mrb_state *mrb, mrb_value hash)
   khash_t(ht) *h, *ret_h;
   khiter_t k, ret_k;
 
+  puts("mrb_hash_dup");
   h = RHASH_TBL(hash);
   ret = (struct RHash*)mrb_obj_alloc(mrb, MRB_TT_HASH, mrb->hash_class);
   ret->ht = kh_init(ht, mrb);
@@ -185,6 +191,7 @@ mrb_hash_dup(mrb_state *mrb, mrb_value hash)
 mrb_value
 mrb_check_hash_type(mrb_state *mrb, mrb_value hash)
 {
+  puts("mrb_check_hash_type");
   return mrb_check_convert_type(mrb, hash, MRB_TT_HASH, "Hash", "to_hash");
 }
 
@@ -193,6 +200,7 @@ mrb_hash_tbl(mrb_state *mrb, mrb_value hash)
 {
   khash_t(ht) *h = RHASH_TBL(hash);
 
+  puts("mrb_hash_tbl");
   if (!h) {
     RHASH_TBL(hash) = kh_init(ht, mrb);
   }
@@ -202,6 +210,7 @@ mrb_hash_tbl(mrb_state *mrb, mrb_value hash)
 static void
 mrb_hash_modify(mrb_state *mrb, mrb_value hash)
 {
+  puts("mrb_hash_modify");
   mrb_hash_tbl(mrb, hash);
 }
 
@@ -248,6 +257,7 @@ mrb_hash_init_core(mrb_state *mrb, mrb_value hash)
   mrb_value *argv;
   int argc;
 
+  puts("mrb_hash_init_core");
   mrb_get_args(mrb, "o*", &block, &argv, &argc);
   mrb_hash_modify(mrb, hash);
   if (mrb_nil_p(block)) {
@@ -290,6 +300,7 @@ mrb_hash_init_core(mrb_state *mrb, mrb_value hash)
 static mrb_value
 to_hash(mrb_state *mrb, mrb_value hash)
 {
+  puts("to_hash");
   return mrb_convert_type(mrb, hash, MRB_TT_HASH, "Hash", "to_hash");
 }
 
@@ -324,6 +335,7 @@ mrb_hash_aget(mrb_state *mrb, mrb_value self)
 {
   mrb_value key;
 
+  puts("mrb_hash_aget");
   mrb_get_args(mrb, "o", &key);
   return mrb_hash_get(mrb, self, key);
 }
@@ -386,6 +398,7 @@ mrb_hash_default(mrb_state *mrb, mrb_value hash)
   int argc;
   mrb_value key;
 
+  puts("mrb_hash_default");
   mrb_get_args(mrb, "*", &argv, &argc);
   if (MRB_RHASH_PROCDEFAULT_P(hash)) {
     if (argc == 0) return mrb_nil_value();
@@ -423,6 +436,7 @@ mrb_hash_set_default(mrb_state *mrb, mrb_value hash)
 {
   mrb_value ifnone;
 
+  puts("mrb_hash_set_default");
   mrb_get_args(mrb, "o", &ifnone);
   mrb_hash_modify(mrb, hash);
   mrb_iv_set(mrb, hash, mrb_intern2(mrb, "ifnone", 6), ifnone);
@@ -450,6 +464,7 @@ mrb_hash_set_default(mrb_state *mrb, mrb_value hash)
 static mrb_value
 mrb_hash_default_proc(mrb_state *mrb, mrb_value hash)
 {
+  puts("mrb_hash_default_proc");
   if (MRB_RHASH_PROCDEFAULT_P(hash)) {
     return RHASH_PROCDEFAULT(hash);
   }
@@ -474,6 +489,7 @@ mrb_hash_set_default_proc(mrb_state *mrb, mrb_value hash)
 {
   mrb_value ifnone;
 
+  puts("mrb_hash_set_default_proc");
   mrb_get_args(mrb, "o", &ifnone);
   mrb_hash_modify(mrb, hash);
   mrb_iv_set(mrb, hash, mrb_intern2(mrb, "ifnone", 6), ifnone);
@@ -489,6 +505,7 @@ mrb_hash_delete_key(mrb_state *mrb, mrb_value hash, mrb_value key)
   khiter_t k;
   mrb_value delVal;
 
+  puts("mrb_hash_delete_key");
   if (h) {
     k = kh_get(ht, h, key);
     if (k != kh_end(h)) {
@@ -525,6 +542,7 @@ mrb_hash_delete(mrb_state *mrb, mrb_value self)
 {
   mrb_value key;
 
+  puts("mrb_hash_delete");
   mrb_get_args(mrb, "o", &key);
   return mrb_hash_delete_key(mrb, self, key);
 }
@@ -550,6 +568,7 @@ mrb_hash_shift(mrb_state *mrb, mrb_value hash)
   khiter_t k;
   mrb_value delKey, delVal;
 
+  puts("mrb_hash_shift");
   mrb_hash_modify(mrb, hash);
   if (h) {
     if (kh_size(h) > 0) {
@@ -660,6 +679,7 @@ mrb_hash_clear(mrb_state *mrb, mrb_value hash)
 {
   khash_t(ht) *h = RHASH_TBL(hash);
 
+  puts("mrb_hash_clear");
   if (h) kh_clear(ht, h);
   return hash;
 }
@@ -688,6 +708,7 @@ mrb_hash_aset(mrb_state *mrb, mrb_value self)
 {
   mrb_value key, val;
 
+  puts("mrb_hash_aset");
   mrb_get_args(mrb, "oo", &key, &val);
   mrb_hash_set(mrb, self, key, val);
   return val;
@@ -714,6 +735,7 @@ mrb_hash_replace(mrb_state *mrb, mrb_value hash)
   khash_t(ht) *h2;
   khiter_t k;
 
+  puts("mrb_hash_replace");
   mrb_get_args(mrb, "o", &hash2);
   hash2 = to_hash(mrb, hash2);
   if (mrb_obj_equal(mrb, hash, hash2)) return hash;
@@ -758,6 +780,7 @@ mrb_hash_size_m(mrb_state *mrb, mrb_value self)
 {
   khash_t(ht) *h = RHASH_TBL(self);
 
+  puts("mrb_hash_size_m");
   if (!h) return mrb_fixnum_value(0);
   return mrb_fixnum_value(kh_size(h));
 }
@@ -777,6 +800,7 @@ mrb_hash_empty_p(mrb_state *mrb, mrb_value self)
 {
   khash_t(ht) *h = RHASH_TBL(self);
 
+  puts("mrb_hash_empty_p");
   if (h) return mrb_bool_value(kh_size(h) == 0);
   return mrb_true_value();
 }
@@ -788,6 +812,7 @@ inspect_hash(mrb_state *mrb, mrb_value hash, int recur)
   khash_t(ht) *h = RHASH_TBL(hash);
   khiter_t k;
 
+  puts("inspect_hash");
   if (recur) return mrb_str_new(mrb, "{...}", 5);
 
   str = mrb_str_new(mrb, "{", 1);
@@ -832,6 +857,7 @@ mrb_hash_inspect(mrb_state *mrb, mrb_value hash)
 {
   khash_t(ht) *h = RHASH_TBL(hash);
 
+  puts("mrb_hash_inspect");
   if (!h || kh_size(h) == 0)
     return mrb_str_new(mrb, "{}", 2);
   return inspect_hash(mrb, hash, 0);
@@ -848,6 +874,7 @@ mrb_hash_inspect(mrb_state *mrb, mrb_value hash)
 static mrb_value
 mrb_hash_to_hash(mrb_state *mrb, mrb_value hash)
 {
+  puts("mrb_hash_to_hash");
     return hash;
 }
 
@@ -871,6 +898,7 @@ mrb_hash_keys(mrb_state *mrb, mrb_value hash)
   khiter_t k;
   mrb_value ary;
 
+  puts("mrb_hash_keys");
   if (!h) return mrb_ary_new(mrb);
   ary = mrb_ary_new_capa(mrb, kh_size(h));
   for (k = kh_begin(h); k != kh_end(h); k++) {
@@ -902,6 +930,7 @@ mrb_hash_values(mrb_state *mrb, mrb_value hash)
   khiter_t k;
   mrb_value ary;
 
+  puts("mrb_hash_values");
   if (!h) return mrb_ary_new(mrb);
   ary = mrb_ary_new_capa(mrb, kh_size(h));
   for (k = kh_begin(h); k != kh_end(h); k++) {
@@ -919,6 +948,7 @@ mrb_hash_has_keyWithKey(mrb_state *mrb, mrb_value hash, mrb_value key)
   khash_t(ht) *h = RHASH_TBL(hash);
   khiter_t k;
 
+  puts("mrb_hash_has_keyWithKey");
   if (h) {
     k = kh_get(ht, h, key);
     return mrb_bool_value(k != kh_end(h));
@@ -950,6 +980,7 @@ mrb_hash_has_key(mrb_state *mrb, mrb_value hash)
 {
   mrb_value key;
 
+  puts("mrb_hash_has_key");
   mrb_get_args(mrb, "o", &key);
   return mrb_hash_has_keyWithKey(mrb, hash, key);
 }
@@ -960,6 +991,7 @@ mrb_hash_has_valueWithvalue(mrb_state *mrb, mrb_value hash, mrb_value value)
   khash_t(ht) *h = RHASH_TBL(hash);
   khiter_t k;
 
+  puts("mrb_hash_has_valueWithvalue");
   if (h) {
     for (k = kh_begin(h); k != kh_end(h); k++) {
       if (!kh_exist(h, k)) continue;
@@ -993,6 +1025,7 @@ mrb_hash_has_value(mrb_state *mrb, mrb_value hash)
 {
   mrb_value val;
 
+  puts("mrb_hash_has_value");
   mrb_get_args(mrb, "o", &val);
   return mrb_hash_has_valueWithvalue(mrb, hash, val);
 }
@@ -1002,6 +1035,7 @@ hash_equal(mrb_state *mrb, mrb_value hash1, mrb_value hash2, int eql)
 {
   khash_t(ht) *h1, *h2;
 
+  puts("hash_equal");
   if (mrb_obj_equal(mrb, hash1, hash2)) return mrb_true_value();
   if (!mrb_hash_p(hash2)) {
       if (!mrb_respond_to(mrb, hash2, mrb_intern2(mrb, "to_hash", 7))) {
@@ -1063,6 +1097,7 @@ mrb_hash_equal(mrb_state *mrb, mrb_value hash1)
 {
   mrb_value hash2;
 
+  puts("mrb_hash_equal");
   mrb_get_args(mrb, "o", &hash2);
   return hash_equal(mrb, hash1, hash2, FALSE);
 }
@@ -1081,6 +1116,7 @@ mrb_hash_eql(mrb_state *mrb, mrb_value hash1)
 {
   mrb_value hash2;
 
+  puts("mrb_hash_eql");
   mrb_get_args(mrb, "o", &hash2);
   return hash_equal(mrb, hash1, hash2, TRUE);
 }
@@ -1148,6 +1184,7 @@ mrb_hash_assoc(mrb_state *mrb, mrb_value hash)
 {
   mrb_value key, value, has_key;
 
+  puts("mrb_hash_assoc");
   mrb_get_args(mrb, "o", &key);
   if (mrb_nil_p(key))
     mrb_raise(mrb, E_ARGUMENT_ERROR, "wrong number of arguments");
@@ -1180,6 +1217,7 @@ mrb_hash_rassoc(mrb_state *mrb, mrb_value hash)
 {
   mrb_value key, value, has_key;
 
+  puts("mrb_hash_rassoc");
   mrb_get_args(mrb, "o", &key);
   has_key = mrb_hash_has_keyWithKey(mrb, hash, key);
   if (mrb_test(has_key)) {
