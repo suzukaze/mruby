@@ -31,6 +31,20 @@ MRuby::Build.new do |conf|
   #   cc.option_define = '-D%s'
   #   cc.compile_options = "%{flags} -MMD -o %{outfile} -c %{infile}"
   # end
+  conf.cc.include_paths << '/usr/local/Cellar/allegro5/HEAD/include/'
+  #linker.library_paths << '/usr/local/Cellar/allegro5/HEAD/lib/'
+  #arregro5_libs = %w(liballegro.5.1.8.dylib liballegro_acodec.5.1.8.dylib liballegro_audio.5.1.8.dylib liballegro_color.5.1.8.dylib liballegro_dialog.5.1.8.dylib liballegro_font.5.1.8.dylib liballegro_image.5.1.8.dylib liballegro_main.5.1.8.dylib liballegro_memfile.5.1.8.dylib liballegro_primitives.5.1.8.dylib)
+  #arregro5_libs = %w(liballegro.5.1.8.dylib liballegro_acodec.5.1.8.dylib liballegro_audio.5.1.8.dylib liballegro_color.5.1.8.dylib liballegro_dialog.5.1.8.dylib liballegro_font.5.1.8.dylib liballegro_image.5.1.8.dylib liballegro_main.5.1.8.dylib liballegro_memfile.5.1.8.dylib liballegro_primitives.5.1.8.dylib)
+  arregro5_libs = %w(liballegro.dylib liballegro_acodec.dylib liballegro_audio.dylib liballegro_color.dylib liballegro_dialog.dylib liballegro_font.dylib liballegro_image.dylib liballegro_main.dylib liballegro_memfile.dylib liballegro_primitives.dylib)
+
+  ALLEGRO5_LIB = '/usr/local/Cellar/allegro5/HEAD/lib'
+  #ALLEGRO5_LIB = '/usr/local/lib'
+  arregro5_libs.map! { |lib| "m #{ALLEGRO5_LIB}/#{lib}" }
+  arregro5_libs.each do |name|
+    puts name
+  end
+
+  conf.linker.libraries << arregro5_libs
 
   # mrbc settings
   # conf.mrbc do |mrbc|
