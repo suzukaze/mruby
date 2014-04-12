@@ -2,15 +2,24 @@ class Array
   ##
   # call-seq:
   #    ary.uniq! -> ary or nil
+  #    ary.uniq! { |item| ... } -> ary or nil
   #
   # Removes duplicate elements from +self+.
+  #
+  # If a block is given, it will use the return value of the block for
+  # comparison.
+  #
   # Returns <code>nil</code> if no changes are made (that is, no
   # duplicates are found).
   #
   #    a = [ "a", "a", "b", "b", "c" ]
   #    a.uniq!   #=> ["a", "b", "c"]
+  #
   #    b = [ "a", "b", "c" ]
   #    b.uniq!   #=> nil
+  #
+  #    c = [["student","sam"], ["student","george"], ["teacher","matz"]]
+  #    c.uniq! { |s| s.first } # => [["student", "sam"], ["teacher", "matz"]]
   #
   def uniq!
     ary = self.dup
