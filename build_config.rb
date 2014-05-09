@@ -24,6 +24,8 @@ MRuby::Build.new do |conf|
   # include the default GEMs
   conf.gembox 'default'
 
+  conf.cc.include_paths << '/Users/hiroejun/brew/opt/hiredis/include'
+  conf.linker.library_paths << '/Users/hiroejun/brew/opt/hiredis/lib'
   # C compiler settings
   # conf.cc do |cc|
   #   cc.command = ENV['CC'] || 'gcc'
