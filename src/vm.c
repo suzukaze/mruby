@@ -486,15 +486,19 @@ eval_under(mrb_state *mrb, mrb_value self, mrb_value blk, struct RClass *c)
     mrb_raise(mrb, E_ARGUMENT_ERROR, "no block given");
   }
   ci = mrb->c->ci;
+
+  puts("check");
   if (ci->acc == CI_ACC_DIRECT) {
     return mrb_yield_with_class(mrb, blk, 0, 0, self, c);
   }
+  puts("check 100");
   ci->target_class = c;
   p = mrb_proc_ptr(blk);
   ci->proc = p;
   if (MRB_PROC_CFUNC_P(p)) {
     return p->body.func(mrb, self);
   }
+  puts("check 200");
   ci->nregs = p->body.irep->nregs;
   ci = cipush(mrb);
   ci->nregs = 0;
