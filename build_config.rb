@@ -15,7 +15,7 @@ MRuby::Build.new do |conf|
   # conf.gem 'examples/mrbgems/c_extension_example' do |g|
   #   g.cc.flags << '-g' # append cflags in this gem
   # end
-  conf.gem '/Users/hiroejun/work/mruby-msgpack/mruby-msgpack' do |g|
+  conf.gem '/Users/hiroejun/repo/src/github.com/suzukaze/mruby-msgpack' do |g|
     g.cc.flags << '-g' # append cflags in this gem
   end
   #conf.gem :git => 'https://github.com/suzukaze/mruby-msgpack.git'
