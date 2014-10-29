@@ -1789,6 +1789,7 @@ codegen(codegen_scope *s, node *tree, int val)
     break;
 
   case NODE_BREAK:
+    fprintf(stderr, "NODE_BREAK\n");
     loop_break(s, tree);
     if (val) push();
     break;
@@ -2615,28 +2616,37 @@ loop_push(codegen_scope *s, enum looptype t)
 static void
 loop_break(codegen_scope *s, node *tree)
 {
+  fprintf(stderr, "loop_break\n");
   if (!s->loop) {
+    fprintf(stderr, "check 1000\n");
     codegen(s, tree, NOVAL);
     raise_error(s, "unexpected break");
   }
   else {
     struct loopinfo *loop;
 
+fprintf(stderr, "check 2000\n");
     if (tree) {
+      fprintf(stderr, "check 3000\n");
       codegen(s, tree, VAL);
       pop();
     }
 
+fprintf(stderr, "check 4000\n");
     loop = s->loop;
     while (loop->type == LOOP_BEGIN) {
+      fprintf(stderr, "check 5000\n");
       genop_peep(s, MKOP_A(OP_POPERR, 1), NOVAL);
       loop = loop->prev;
     }
     while (loop->type == LOOP_RESCUE) {
+      fprintf(stderr, "check 6000\n");
       loop = loop->prev;
     }
     if (loop->type == LOOP_NORMAL) {
       int tmp;
+
+      fprintf(stderr, "check 6000\n");
 
       if (s->ensure_level > s->loop->ensure_level) {
         genop_peep(s, MKOP_A(OP_EPOP, s->ensure_level - s->loop->ensure_level), NOVAL);
@@ -2648,6 +2658,7 @@ loop_break(codegen_scope *s, node *tree)
       loop->pc3 = tmp;
     }
     else {
+            fprintf(stderr, "check 7000\n");
       genop(s, MKOP_AB(OP_RETURN, cursp(), OP_R_BREAK));
     }
   }

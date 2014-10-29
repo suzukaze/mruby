@@ -39,6 +39,8 @@ env_new(mrb_state *mrb, int nlocals)
 {
   struct REnv *e;
 
+  //fprintf(stderr, "env_new\n");
+
   e = (struct REnv*)mrb_obj_alloc(mrb, MRB_TT_ENV, (struct RClass*)mrb->c->ci->proc->env);
   MRB_SET_ENV_STACK_LEN(e, nlocals);
   e->mid = mrb->c->ci->mid;

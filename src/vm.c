@@ -581,6 +581,8 @@ mrb_yield_with_class(mrb_state *mrb, mrb_value b, mrb_int argc, const mrb_value 
   int n = mrb->c->ci->nregs;
   mrb_value val;
 
+  fprintf(stderr, "mrb_yield_with_class\n");
+
   if (mrb_nil_p(b)) {
     mrb_raise(mrb, E_ARGUMENT_ERROR, "no block given");
   }
@@ -594,10 +596,12 @@ mrb_yield_with_class(mrb_state *mrb, mrb_value b, mrb_int argc, const mrb_value 
   ci->acc = CI_ACC_SKIP;
   mrb->c->stack = mrb->c->stack + n;
   if (MRB_PROC_CFUNC_P(p)) {
+    fprintf(stderr, "cfunc\n");
     ci->nregs = argc + 2;
     stack_extend(mrb, ci->nregs, 0);
   }
   else {
+    fprintf(stderr, "ruby\n");
     ci->nregs = p->body.irep->nregs;
     stack_extend(mrb, ci->nregs, argc+2);
   }
@@ -609,11 +613,13 @@ mrb_yield_with_class(mrb_state *mrb, mrb_value b, mrb_int argc, const mrb_value 
   mrb->c->stack[argc+1] = mrb_nil_value();
 
   if (MRB_PROC_CFUNC_P(p)) {
+    fprintf(stderr, "cfunc 2\n");
     val = p->body.func(mrb, self);
     mrb->c->stack = mrb->c->ci->stackent;
     cipop(mrb);
   }
   else {
+    fprintf(stderr, "ruby 2\n");
     val = mrb_run(mrb, p, self);
   }
   return val;
@@ -726,6 +732,7 @@ mrb_context_run(mrb_state *mrb, struct RProc *proc, mrb_value self, unsigned int
   struct mrb_jmpbuf *prev_jmp = mrb->jmp;
   struct mrb_jmpbuf c_jmp;
 
+  fprintf(stderr, "mrb_context_run start\n");
 #ifdef DIRECT_THREADED
   static void *optable[] = {
     &&L_OP_NOP, &&L_OP_MOVE,
@@ -1536,6 +1543,7 @@ RETRY_TRY_BLOCK:
           ci = mrb->c->ci;
           break;
         case OP_R_BREAK:
+        fprintf(stderr, "OP_R_BREAK\n");
           if (!proc->env || !MRB_ENV_STACK_SHARED_P(proc->env)) {
             localjump_error(mrb, LOCALJUMP_ERROR_BREAK);
             goto L_RAISE;
@@ -1544,18 +1552,28 @@ RETRY_TRY_BLOCK:
           if (mrb->c->ci == mrb->c->cibase && mrb->c->ci->pc) {
             struct mrb_context *c = mrb->c;
 
+            fprintf(stderr, "OP_R_BREAK 1000\n");
+
             mrb->c = c->prev;
             c->prev = NULL;
           }
           ci = mrb->c->ci;
-          mrb->c->ci = mrb->c->cibase + proc->env->cioff + 1;
+          fprintf(stderr, "mrb->c->ci=%d\n", mrb->c->ci);
+          fprintf(stderr, "mrb->c->cibase=%d\n", mrb->c->cibase);
+          fprintf(stderr, "proc->env->cioff=%d\n", proc->env->cioff);
+          mrb->c->ci = mrb->c->cibase + proc->env->cioff + 1; // これが原因で落ちる
+          fprintf(stderr, "OP_R_BREAK 2000\n");
+          fprintf(stderr, "mrb->c->ci=%d\n", mrb->c->ci);
           while (ci > mrb->c->ci) {
+            fprintf(stderr, "OP_R_BREAK 2100\n");
             if (ci[-1].acc == CI_ACC_SKIP) {
+              fprintf(stderr, "OP_R_BREAK CI_ACC_SKIP\n");
               mrb->c->ci = ci;
               break;
             }
             ci--;
           }
+          fprintf(stderr, "OP_R_BREAK 3000\n");
           break;
         default:
           /* cannot happen */
@@ -2363,11 +2381,15 @@ RETRY_TRY_BLOCK:
   END_DISPATCH;
 
   }
+
+      fprintf(stderr, "mrb_context_run -100 end\n");
   MRB_CATCH(&c_jmp) {
     exc_catched = TRUE;
     goto RETRY_TRY_BLOCK;
   }
   MRB_END_EXC(&c_jmp);
+
+    fprintf(stderr, "mrb_context_run end\n");
 }
 
 MRB_API mrb_value
