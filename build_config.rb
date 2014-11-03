@@ -20,6 +20,7 @@ MRuby::Build.new do |conf|
   # conf.gem :git => 'git@github.com:masuidrive/mrbgems-example.git', :branch => 'master', :options => '-v'
 
   conf.gem '/Users/hiroejun/repo/src/github.com/suzukaze/mruby-redis'
+  conf.gem :github => 'matsumoto-r/mruby-sleep'
 
   # include the default GEMs
   conf.gembox 'default'
